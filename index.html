@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drag and Drop Assignment - By Karan Singh</title>
+  <style>
+    .container {
+      width: 300px;
+      height: 300px;
+      border: 1px solid #ccc;
+      float: left;
+      margin-right: 20px;
+      padding: 10px;
+    }
+
+    .item {
+      width: 50px;
+      height: 50px;
+      background-color: #f1f1f1;
+      border: 1px solid #ccc;
+      margin: 5px;
+      padding: 10px;
+      cursor: move;
+    }
+
+    .item.dragging {
+      opacity: 0.5;
+    }
+
+    .success-message {
+      color: green;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container1">
+    <div class="item" draggable="true">Item 1</div>
+    <div class="item" draggable="true">Item 2</div>
+    <div class="item" draggable="true">Item 3</div>
+  </div>
+  <div class="container" id="container2" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <p>Drop items here</p>
+  </div>
+  <button onclick="resetContainers()">Reset</button>
+  <div class="success-message" id="successMessage"></div>
+
+  <script>
+    var draggedItem = null;
+    var successMessage = document.getElementById('successMessage');
+
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    function drag(event) {
+      draggedItem = event.target;
+      event.dataTransfer.setData('text/plain', null);
+      event.target.classList.add('dragging');
+    }
+
+    function drop(event) {
+      event.preventDefault();
+      draggedItem.classList.remove('dragging');
+      event.target.appendChild(draggedItem);
+      successMessage.innerHTML = 'Item dropped successfully!';
+    }
+
+    function resetContainers() {
+      var container1 = document.getElementById('container1');
+      var container2 = document.getElementById('container2');
+      container2.innerHTML = '<p>Drop items here</p>';
+      container1.appendChild(document.getElementsByClassName('item')[0]);
+      container1.appendChild(document.getElementsByClassName('item')[1]);
+      container1.appendChild(document.getElementsByClassName('item')[2]);
+      successMessage.innerHTML = '';
+    }
+
+    var items = document.getElementsByClassName('item');
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener('dragstart', drag);
+    }
+  </script>
+</body>
+</html>
